@@ -49,3 +49,12 @@ The project also includes automated insights that identify:
 *   The worst-performing class for each model.
 *   The most frequent misclassifications (confusion matrix analysis).
 *   The overall hardest and easiest digits to classify across all models.
+
+## 5. Installation
+
+To run the notebook, you need to install the required Python packages. You can install them using `pip`:
+
+```bash
+pip install -r requirements.txt
+```
+
