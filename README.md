@@ -2,6 +2,9 @@
 
 This project implements and compares three different machine learning algorithms for classifying handwritten digits using the USPS dataset.
 
+## Sample Dataset
+<img width="576" height="563" alt="image" src="https://github.com/user-attachments/assets/f90f59a4-2993-4510-9bcd-1a54611134ae" />
+
 ## Project Structure
 
 ```
