@@ -2,6 +2,31 @@
 
 This project implements and compares three different machine learning algorithms for classifying handwritten digits using the USPS dataset.
 
+## Project Structure
+
+```
+usps-digit-vision/
+│
+├── data/                   
+│   ├── USPS_all.mat
+│   
+├── notebooks/              
+│   ├── Handwritten-Digit-Classification.ipynb
+│
+├── src/                    # Source code (Python modules/scripts)
+│   ├── data_preprocessing.py
+│   ├── knn.py
+│   ├── svm.py
+│   ├── decision_tree.py
+│
+├── results/                # Results: metrics, confusion matrices, plots
+│   ├── confusion_matrices/
+│   └── figures/
+│
+├── requirements.txt        # Packages needed to run the project
+├── README.md               # Project overview, instructions, insights
+```
+
 ## 1. Algorithms Used
 
 The following algorithms were implemented and evaluated:
@@ -52,9 +77,21 @@ The project also includes automated insights that identify:
 
 ## 5. Installation
 
-To run the notebook, you need to install the required Python packages. You can install them using `pip`:
+To run the project, you need to install the required Python packages. You can install them using `pip`:
 
 ```bash
 pip install -r requirements.txt
 ```
+
+## 6. Usage
+
+### Running the Notebook
+Open the notebook in `notebooks/Handwritten-Digit-Classification.ipynb` and run the cells.
+
+```bash
+jupyter notebook notebooks/Handwritten-Digit-Classification.ipynb
+```
+
+### Running Scripts
+The core logic has been extracted to `src/` modules, which are imported by the notebook.
 
