@@ -2,7 +2,7 @@ import time
 import os
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay, f1_score
 from sklearn.model_selection import StratifiedKFold, cross_val_predict
 
 def train_evaluate_knn(features, labels):
@@ -27,16 +27,18 @@ def train_evaluate_knn(features, labels):
         pred_time = time.time() - pred_start
         
         acc = accuracy_score(labels, predicted_labels)
+        f1 = f1_score(labels, predicted_labels, average='macro')
         cm = confusion_matrix(labels, predicted_labels)
         
         results.append({
             'model': 'KNN',
             'config': {'k': k, 'weights': 'distance'},
             'accuracy': acc,
+            'f1_score': f1,
             'confusion_matrix': cm,
             'time': train_time + pred_time # Total time
         })
-        print(f"k={k}, weights='distance', Accuracy Rate: {acc:.2%}, Training Time: {train_time + pred_time:.4f}s")
+        print(f"k={k}, weights='distance', Accuracy Rate: {acc:.2%}, F1 Score: {f1:.4f}, Training Time: {train_time + pred_time:.4f}s")
         
         # Plot Confusion Matrix
         disp = ConfusionMatrixDisplay(confusion_matrix=cm)
@@ -58,16 +60,18 @@ def train_evaluate_knn(features, labels):
     pred_time = time.time() - pred_start
     
     acc = accuracy_score(labels, predicted_labels)
+    f1 = f1_score(labels, predicted_labels, average='macro')
     cm = confusion_matrix(labels, predicted_labels)
     
     results.append({
         'model': 'KNN',
         'config': {'k': 3, 'weights': 'uniform'},
         'accuracy': acc,
+        'f1_score': f1,
         'confusion_matrix': cm,
         'time': train_time + pred_time
     })
-    print(f"k=3, weights='uniform', Accuracy Rate: {acc:.2%}, Training Time: {train_time + pred_time:.4f}s")
+    print(f"k=3, weights='uniform', Accuracy Rate: {acc:.2%}, F1 Score: {f1:.4f}, Training Time: {train_time + pred_time:.4f}s")
     
     # Plot Confusion Matrix
     disp = ConfusionMatrixDisplay(confusion_matrix=cm)

@@ -57,7 +57,13 @@ Various hyperparameters were tuned for each model to optimize performance:
     *   `degree`: For the polynomial kernel, degrees 2 and 3 were evaluated.
     *   `decision_function_shape`: Used 'ovr' (one-vs-rest) for multiclass classification.
 
-## 3. Preprocessing Steps
+## 3. Evaluation Metrics
+To assess the performance of the classification models, the following metrics were used:
+*   **Accuracy**: The ratio of correctly predicted observations to the total observations. It provides a general sense of how often the model is correct.
+*   **F1 Score (Macro)**: The harmonic mean of precision and recall. The 'macro' average calculates the metric independently for each class and then takes the average, treating all classes equally. This is crucial for understanding performance across all digits, regardless of their frequency in the dataset.
+*   **Confusion Matrix**: A table used to evaluate the performance of the classification model. It shows the true vs. predicted labels, identifying specific classes where the model is confused (e.g., mistaking a '3' for a '5').
+
+## 4. Preprocessing Steps
 
 The data preprocessing pipeline involved the following steps:
 
@@ -65,7 +71,7 @@ The data preprocessing pipeline involved the following steps:
 2.  **Data Splitting**: The dataset was split into a training set (first 7291 samples) and a test set (remaining 2007 samples).
 3.  **Normalization**: The feature data (`X`) was normalized using Z-score normalization (`StandardScaler`). This ensures that all features contribute equally to the distance calculations (crucial for KNN and SVM) and helps with convergence.
 
-## 4. High-Level Comparison of Algorithms
+## 5. High-Level Comparison of Algorithms
 
 Based on the evaluation results:
 
@@ -78,7 +84,7 @@ The project also includes automated insights that identify:
 *   The most frequent misclassifications (confusion matrix analysis).
 *   The overall hardest and easiest digits to classify across all models.
 
-## 5. Installation
+## 6. Installation
 
 To run the project, you need to install the required Python packages. You can install them using `pip`:
 
@@ -86,7 +92,7 @@ To run the project, you need to install the required Python packages. You can in
 pip install -r requirements.txt
 ```
 
-## 6. Usage
+## 7. Usage
 
 ### Running the Notebook
 Open the notebook in `notebooks/Handwritten-Digit-Classification.ipynb` and run the cells.

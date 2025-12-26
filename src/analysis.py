@@ -43,6 +43,8 @@ def analyze_results(results):
         print(f"\nModel: {res['model']}")
         print(f"Config: {res['config']}")
         print(f"  -> Worst Class: Digit {worst_class} (Accuracy Rate: {worst_acc:.2%})")
+        if 'f1_score' in res:
+             print(f"  -> Overall F1 Score: {res['f1_score']:.4f}")
         print(f"  -> Most Frequent Misclassification: {mis_desc}")
 
     # 2. Overall Hardest Digit
@@ -63,9 +65,12 @@ def analyze_results(results):
         linear_acc = next((r['accuracy'] for r in svm_results if r['config']['kernel'] == 'linear'), 0)
         poly_acc = max((r['accuracy'] for r in svm_results if r['config']['kernel'] == 'poly'), default=0)
         
+        linear_f1 = next((r.get('f1_score', 0) for r in svm_results if r['config']['kernel'] == 'linear'), 0)
+        poly_f1 = max((r.get('f1_score', 0) for r in svm_results if r['config']['kernel'] == 'poly'), default=0)
+        
         print("\n[SVM Analysis]")
         if poly_acc > linear_acc:
-            print(f"  - Polynomial kernel ({poly_acc:.2%}) outperformed Linear kernel ({linear_acc:.2%}).")
+            print(f"  - Polynomial kernel (Acc: {poly_acc:.2%}, F1: {poly_f1:.4f}) outperformed Linear kernel (Acc: {linear_acc:.2%}, F1: {linear_f1:.4f}).")
             print("  - Insight: The data is likely not linearly separable. Mapping to a higher-dimensional space helped separate the classes.")
         else:
             print(f"  - Linear kernel performed similarly or better than Polynomial.")
@@ -80,7 +85,7 @@ def analyze_results(results):
         best_k = best_k_res['config']['k']
         
         print("\n[KNN Analysis]")
-        print(f"  - Best k value was {best_k} with accuracy {best_k_res['accuracy']:.2%}.")
+        print(f"  - Best k value was {best_k} with accuracy {best_k_res['accuracy']:.2%} and F1 score {best_k_res.get('f1_score', 0):.4f}.")
         if best_k <= 3:
             print("  - Insight: Lower k values performed well, suggesting that the decision boundaries are complex and local neighborhood structure is very informative.")
         else:
@@ -93,8 +98,8 @@ def analyze_results(results):
         worst_dt = min(dt_results, key=lambda x: x['accuracy'])
         
         print("\n[Decision Tree Analysis]")
-        print(f"  - Best Config: {best_dt['config']} ({best_dt['accuracy']:.2%})")
-        print(f"  - Worst Config: {worst_dt['config']} ({worst_dt['accuracy']:.2%})")
+        print(f"  - Best Config: {best_dt['config']} (Acc: {best_dt['accuracy']:.2%}, F1: {best_dt.get('f1_score', 0):.4f})")
+        print(f"  - Worst Config: {worst_dt['config']} (Acc: {worst_dt['accuracy']:.2%}, F1: {worst_dt.get('f1_score', 0):.4f})")
         
         if best_dt['config'].get('max_leaf_nodes') is None and worst_dt['config'].get('max_leaf_nodes') is not None:
              print("  - Insight: Restricting the tree size (max_leaf_nodes) significantly hurt performance, indicating that a complex tree is needed to capture the nuances of handwritten digits.")

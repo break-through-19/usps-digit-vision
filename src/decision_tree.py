@@ -2,7 +2,7 @@ import time
 import os
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
-from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay, f1_score
 from sklearn.model_selection import StratifiedKFold, cross_val_predict
 
 def train_evaluate_dt(features, labels):
@@ -45,16 +45,18 @@ def train_evaluate_dt(features, labels):
         train_time = time.time() - start_time
         
         acc = accuracy_score(labels, predicted_labels)
+        f1 = f1_score(labels, predicted_labels, average='macro')
         cm = confusion_matrix(labels, predicted_labels)
         
         results.append({
             'model': 'Decision Tree',
             'config': config,
             'accuracy': acc,
+            'f1_score': f1,
             'confusion_matrix': cm,
             'time': train_time
         })
-        print(f"Config: {config}, Accuracy Rate: {acc:.2%}, Training Time: {train_time:.4f}s")
+        print(f"Config: {config}, Accuracy Rate: {acc:.2%}, F1 Score: {f1:.4f}, Training Time: {train_time:.4f}s")
         
         # Plot Confusion Matrix
         disp = ConfusionMatrixDisplay(confusion_matrix=cm)
