@@ -68,8 +68,7 @@ To assess the performance of the classification models, the following metrics we
 The data preprocessing pipeline involved the following steps:
 
 1.  **Data Loading**: The USPS dataset was loaded from `USPS_all.mat`.
-2.  **Data Splitting**: The dataset was split into a training set (first 7291 samples) and a test set (remaining 2007 samples).
-3.  **Normalization**: The feature data (`X`) was normalized using Z-score normalization (`StandardScaler`). This ensures that all features contribute equally to the distance calculations (crucial for KNN and SVM) and helps with convergence.
+2.  **Normalization**: The feature data (`X`) was normalized using Z-score normalization (`StandardScaler`). This ensures that all features contribute equally to the distance calculations (crucial for KNN and SVM) and helps with convergence.
 
 ## 5. High-Level Comparison of Algorithms
 
