@@ -3,8 +3,9 @@ import os
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.model_selection import StratifiedKFold, cross_val_predict
 
-def train_evaluate_knn(X_train, y_train, X_test, y_test):
+def train_evaluate_knn(features, labels):
     print("\n" + "="*50)
     print("K-NEAREST NEIGHBORS MODEL")
     print("="*50)
@@ -12,21 +13,21 @@ def train_evaluate_knn(X_train, y_train, X_test, y_test):
     
     # 2.2.1 Different values of k
     k_values = [1, 3, 5, 7]
-    
+    cross_validator = StratifiedKFold(n_splits=10, shuffle=True, random_state=42)
+
     for k in k_values:
         start_time = time.time()
         knn = KNeighborsClassifier(n_neighbors=k, weights='distance')
-        knn.fit(X_train, y_train)
         # Training time for KNN is 0 technically, but let's include fit time
         train_time = time.time() - start_time
         
         # Prediction time is the heavy part
         pred_start = time.time()
-        y_pred = knn.predict(X_test)
+        predicted_labels = cross_val_predict(knn, features, labels, cv=cross_validator)
         pred_time = time.time() - pred_start
         
-        acc = accuracy_score(y_test, y_pred)
-        cm = confusion_matrix(y_test, y_pred)
+        acc = accuracy_score(labels, predicted_labels)
+        cm = confusion_matrix(labels, predicted_labels)
         
         results.append({
             'model': 'KNN',
@@ -50,15 +51,14 @@ def train_evaluate_knn(X_train, y_train, X_test, y_test):
     # 2.2.2 Distance weighting
     start_time = time.time()
     knn_dist = KNeighborsClassifier(n_neighbors=3, weights='uniform')
-    knn_dist.fit(X_train, y_train)
     train_time = time.time() - start_time
     
     pred_start = time.time()
-    y_pred = knn_dist.predict(X_test)
+    predicted_labels = cross_val_predict(knn_dist, features, labels, cv=cross_validator)
     pred_time = time.time() - pred_start
     
-    acc = accuracy_score(y_test, y_pred)
-    cm = confusion_matrix(y_test, y_pred)
+    acc = accuracy_score(labels, predicted_labels)
+    cm = confusion_matrix(labels, predicted_labels)
     
     results.append({
         'model': 'KNN',

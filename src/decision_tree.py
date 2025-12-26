@@ -3,8 +3,9 @@ import os
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.model_selection import StratifiedKFold, cross_val_predict
 
-def train_evaluate_dt(X_train, y_train, X_test, y_test):
+def train_evaluate_dt(features, labels):
     print("\n" + "="*50)
     print("DECISION TREE MODEL")
     print("="*50)
@@ -12,13 +13,13 @@ def train_evaluate_dt(X_train, y_train, X_test, y_test):
     
     # 2.1.1 Print out the tree (using default params first or a small one)
     dt_default = DecisionTreeClassifier(random_state=42)
-    dt_default.fit(X_train, y_train)
+    dt_default.fit(features, labels)
     print("Decision Tree Structure:")
-    print(export_text(dt_default, feature_names=[f'pixel_{i}' for i in range(X_train.shape[1])]))
+    print(export_text(dt_default, feature_names=[f'pixel_{i}' for i in range(features.shape[1])]))
     
     # Plot the tree
     plt.figure(figsize=(20,10))
-    plot_tree(dt_default, max_depth=2, feature_names=[f'pixel_{i}' for i in range(X_train.shape[1])], filled=True)
+    plot_tree(dt_default, max_depth=2, feature_names=[f'pixel_{i}' for i in range(features.shape[1])], filled=True)
     plt.title("Decision Tree Visualization (Top Levels)")
     
     # Save figure
@@ -34,16 +35,17 @@ def train_evaluate_dt(X_train, y_train, X_test, y_test):
         {'max_leaf_nodes': None, 'min_samples_split': 2, 'min_samples_leaf': 5, 'criterion': 'gini'},
         {'max_leaf_nodes': None, 'min_samples_split': 2, 'min_samples_leaf': 1, 'criterion': 'entropy'},
     ]
+
+    cross_validator = StratifiedKFold(n_splits=10, shuffle=True, random_state=42)
     
     for config in configs:
         start_time = time.time()
         clf = DecisionTreeClassifier(random_state=42, **config)
-        clf.fit(X_train, y_train)
+        predicted_labels = cross_val_predict(clf, features, labels, cv=cross_validator)
         train_time = time.time() - start_time
         
-        y_pred = clf.predict(X_test)
-        acc = accuracy_score(y_test, y_pred)
-        cm = confusion_matrix(y_test, y_pred)
+        acc = accuracy_score(labels, predicted_labels)
+        cm = confusion_matrix(labels, predicted_labels)
         
         results.append({
             'model': 'Decision Tree',

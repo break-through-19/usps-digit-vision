@@ -3,8 +3,9 @@ import os
 import matplotlib.pyplot as plt
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.model_selection import StratifiedKFold, cross_val_predict
 
-def train_evaluate_svm(X_train, y_train, X_test, y_test):
+def train_evaluate_svm(features, labels):
     print("\n" + "="*50)
     print("SUPPORT VECTOR MACHINE MODEL")
     print("="*50)
@@ -15,16 +16,16 @@ def train_evaluate_svm(X_train, y_train, X_test, y_test):
         {'kernel': 'poly', 'decision_function_shape': 'ovr', 'degree': 2}, # Polynomial degree 2
         {'kernel': 'poly', 'decision_function_shape': 'ovr', 'degree': 3}, # Polynomial degree 3
     ]
-    
+    cross_validator = StratifiedKFold(n_splits=10, shuffle=True, random_state=42)
+
     for config in configs:
         start_time = time.time()
         clf = SVC(**config)
-        clf.fit(X_train, y_train)
+        predicted_labels = cross_val_predict(clf, features, labels, cv=cross_validator)
         train_time = time.time() - start_time
         
-        y_pred = clf.predict(X_test)
-        acc = accuracy_score(y_test, y_pred)
-        cm = confusion_matrix(y_test, y_pred)
+        acc = accuracy_score(labels, predicted_labels)
+        cm = confusion_matrix(labels, predicted_labels)
         
         results.append({
             'model': 'SVM',
