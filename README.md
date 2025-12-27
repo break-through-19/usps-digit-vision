@@ -63,6 +63,9 @@ To assess the performance of the classification models, the following metrics we
 *   **F1 Score (Macro)**: The harmonic mean of precision and recall. The 'macro' average calculates the metric independently for each class and then takes the average, treating all classes equally. This is crucial for understanding performance across all digits, regardless of their frequency in the dataset.
 *   **Confusion Matrix**: A table used to evaluate the performance of the classification model. It shows the true vs. predicted labels, identifying specific classes where the model is confused (e.g., mistaking a '3' for a '5').
 
+<img width="400" height="350" alt="image" src="https://github.com/user-attachments/assets/8d2b753c-f413-4384-9b62-3848961ba16f" />
+
+
 ## 4. Preprocessing Steps
 
 The data preprocessing pipeline involved the following steps:
